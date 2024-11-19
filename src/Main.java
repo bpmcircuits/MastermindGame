@@ -67,8 +67,9 @@ public class Main {
 
 class ArrayGen {
 
-    private final int[] digits;
+    private final int[] digits; // Tablica cyfr
 
+    // Konstruktor klasy, który zapisuje otrzymany ciąg znaków do tablicy
     public ArrayGen(String number) {
 
         digits = new int[number.length()];
@@ -79,8 +80,10 @@ class ArrayGen {
 
     }
 
+    // Konstruktor overload ze zmienną typu StringBuilder
     public ArrayGen(StringBuilder number) { this(number.toString()); }
 
+    // Metoda zwracająca zawartość tablicy digits
     int[] getDigits() { return digits; }
 }
 
@@ -90,7 +93,7 @@ class GameCode {
     StringBuilder numberAsString; // Liczba losowa jako ciąg znaków
     int[] computerDigits, playerDigits; // Tablice cyfr dla komputera i gracza
 
-    // Konstruktor klasy — generuje losową liczbę i zapisuje jej cyfry w tablicy
+    // Konstruktor klasy, który generuje losową liczbę i zapisuje jej cyfry w tablicy
     public GameCode() {
 
         numberAsString = new StringBuilder();
