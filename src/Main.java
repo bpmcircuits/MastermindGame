@@ -7,9 +7,12 @@ public class Main {
         createIntro();
 
         // TESTs
-        //testingNumbers("1234", "1234");
-        //testingNumbers("1234", "4321");
-        //testingNumbers("1234", "1111");
+//        testingNumbers("1234", "1234");
+//        testingNumbers("1234", "4321");
+//        testingNumbers("1234", "1111");
+//        testingNumbers("1234", "1111");
+//        testingNumbers("1234", "1221");
+//        testingNumbers("1234", "1231");
 
         // Tworzenie obiektu Scanner do wczytywania danych od użytkownika
         try (Scanner userInputObj = new Scanner(System.in)) {
@@ -62,9 +65,11 @@ public class Main {
     }
 
     private static void testingNumbers(String secret, String userInput) {
+        System.out.println("Secret: " + secret);
+        System.out.println("User input: " + userInput);
         var mm = new GameCode(secret);
         var result = mm.tryNumber(userInput);
-        System.out.println("Wynik testu: " + result);
+        //System.out.println("Wynik testu: " + result);
     }
 }
 
@@ -164,6 +169,7 @@ class GameCode {
         // Wyświetlenie wyników analizy
         System.out.println("Liczba trafionych cyfr na właściwych miejscach: " + samePosition);
         System.out.println("Liczba trafionych cyfr, ale na niewłaściwych miejscach: " + differentPosition);
+        System.out.println();
 
         // Warunek zwycięstwa (wszystkie cyfry trafione na właściwych miejscach)
         // Zwraca fałsz w przeciwnym przypadku
