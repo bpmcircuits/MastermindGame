@@ -16,7 +16,7 @@ public class Main {
             GameCode number = new GameCode();
 
             // Debug: Wyświetlenie wylosowanej liczby (zakomentowane, aby nie zdradzać wyniku graczowi)
-            System.out.println("Losowa liczba: " + number.returnNumber());
+            //System.out.println("Losowa liczba: " + number.returnNumber());
 
             // Pętla, która pozwala użytkownikowi zgadywać liczby do skutku
             while (true) {
