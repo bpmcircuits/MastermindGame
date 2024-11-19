@@ -16,12 +16,12 @@ public class Main {
             GameCode number = new GameCode();
 
             // Debug: Wyświetlenie wylosowanej liczby (zakomentowane, aby nie zdradzać wyniku graczowi)
-            //System.out.println("Losowa liczba: " + number.returnNumber());
+            System.out.println("Losowa liczba: " + number.returnNumber());
 
             // Pętla, która pozwala użytkownikowi zgadywać liczby do skutku
             while (true) {
                 try {
-                    System.out.println("Zgadnij losową liczbe czterocyfrową:");
+                    System.out.println("Zgadnij losową liczbę czterocyfrową:");
 
                     // Wczytanie liczby od użytkownika
                     String userInput = userInputObj.nextLine();
@@ -65,13 +65,32 @@ public class Main {
     }
 }
 
+class ArrayGen {
+
+    private final int[] digits;
+
+    public ArrayGen(String number) {
+
+        digits = new int[number.length()];
+
+        for (int i = 0; i < number.length(); i++) {
+            digits[i] = Character.getNumericValue(number.charAt(i));
+        }
+
+    }
+
+    public ArrayGen(StringBuilder number) { this(number.toString()); }
+
+    int[] getDigits() { return digits; }
+}
+
 class GameCode {
 
     Random random = new Random(); // Inicjalizacja obiektu Random do generowania liczb losowych
     StringBuilder numberAsString; // Liczba losowa jako ciąg znaków
     int[] computerDigits, playerDigits; // Tablice cyfr dla komputera i gracza
 
-    // Konstruktor klasy - generuje losową liczbę i zapisuje jej cyfry w tablicy
+    // Konstruktor klasy — generuje losową liczbę i zapisuje jej cyfry w tablicy
     public GameCode() {
 
         numberAsString = new StringBuilder();
@@ -80,14 +99,9 @@ class GameCode {
             numberAsString.append(digit);
         }
 
-        computerDigits = new int[numberAsString.length()]; // Tablica cyfr
-
-        // Wypełnianie tablicy cyfr na podstawie losowej liczby
-        for (int i = 0; i < numberAsString.length(); i++) {
-            computerDigits[i] = Character.getNumericValue(numberAsString.charAt(i));
-            // Debug: Wyświetlenie cyfr komputera
-            // System.out.println("Tablica znaków kompa: " + digits[i]);
-        }
+        // Inicjalizacja obiektu ArrayGen do generowania tablicy z wygenerowanymi liczbami komputera
+        ArrayGen digits = new ArrayGen(numberAsString);
+        computerDigits = digits.getDigits();
     }
 
     // Analiza wprowadzonej liczby przez użytkownika
@@ -97,15 +111,9 @@ class GameCode {
         List<Integer> samePosition = new ArrayList<>();
         List<Integer> differentPosition = new ArrayList<>();
 
-        // Konwersja liczby gracza na tablicę cyfr
-        playerDigits = new int[number.length()];
-
-        // Wypełnianie tablicy cyfr użytkownika
-        for (int i = 0; i < number.length(); i++) {
-            playerDigits[i] = Character.getNumericValue(number.charAt(i));
-            // Debug: Wyświetlenie cyfr użytkownika
-            // System.out.println("Tablica znaków usera: " + playerDigits[i]);
-        }
+        // Inicjalizacja obiektu ArrayGen do generowania tablicy z wygenerowanymi liczbami użytkownika
+        ArrayGen digits = new ArrayGen(number);
+        playerDigits = digits.getDigits();
 
         // Sprawdzenie, czy liczba ma dokładnie 4 cyfry
         if (playerDigits.length != 4) {
