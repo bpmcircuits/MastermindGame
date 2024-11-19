@@ -6,7 +6,10 @@ public class Main {
 
         createIntro();
 
-        //tryNumber_whenExactMatch_isFullMatch();
+        // TESTs
+        //testingNumbers("1234", "1234");
+        //testingNumbers("1234", "4321");
+        //testingNumbers("1234", "1111");
 
         // Tworzenie obiektu Scanner do wczytywania danych od użytkownika
         try (Scanner userInputObj = new Scanner(System.in)) {
@@ -58,9 +61,9 @@ public class Main {
 
     }
 
-    private static void tryNumber_whenExactMatch_isFullMatch() {
-        var mm = new GameCode("1234");
-        var result = mm.tryNumber("1234");
+    private static void testingNumbers(String secret, String userInput) {
+        var mm = new GameCode(secret);
+        var result = mm.tryNumber(userInput);
         System.out.println("Wynik testu: " + result);
     }
 }
