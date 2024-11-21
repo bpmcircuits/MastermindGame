@@ -7,11 +7,11 @@ public class Main {
         createIntro();
 
         // TESTs
-//        testingNumbersArray(new int[]{1, 2, 3, 4}, "1234");
-//        testingNumbersArray(new int[]{1, 2, 3, 4}, "4321");
-//        testingNumbersArray(new int[]{1, 2, 3, 4}, "1111");
-//        testingNumbersArray(new int[]{1, 2, 3, 4}, "1221");
-//        testingNumbersArray(new int[]{1, 2, 3, 4}, "1231");
+//        testingNumbersArray(new int[]{2, 3, 4, 5}, "2345");
+//        testingNumbersArray(new int[]{2, 3, 4, 5}, "5432");
+//        testingNumbersArray(new int[]{2, 3, 4, 5}, "2222");
+//        testingNumbersArray(new int[]{2, 3, 4, 5}, "2232");
+//        testingNumbersArray(new int[]{2, 3, 4, 5}, "5545");
 
         // Tworzenie obiektu Scanner do wczytywania danych od użytkownika
         try (Scanner userInputObj = new Scanner(System.in)) {
@@ -76,10 +76,11 @@ class GameCode {
     final static int NO_DIGITS = 4;
 
     Random random = new Random(); // Inicjalizacja obiektu Random do generowania liczb losowych
-    int[] computerDigits = new int[NO_DIGITS];
+    int[] secretNumber = new int[NO_DIGITS];
+    HashMap<Integer, Integer>secretWithPositions = new HashMap<>();
     int[] playerDigits = new int[NO_DIGITS]; // Tablice cyfr dla komputera i gracza
 
-    // Konstruktor klasy, który generuje losową liczbę i zapisuje jej cyfry w tablicy
+    // Konstruktor klasy, który generuje losową liczbę z czterech unikalnych cyfr i zapisuje jej cyfry w tablicy
     public GameCode() {
 
         List<Integer> availableDigits = new ArrayList<>();
@@ -89,67 +90,70 @@ class GameCode {
         for (int i = 0; i < NO_DIGITS; i++) {
             int index = random.nextInt(availableDigits.size());
             int digit = availableDigits.remove(index);
-            computerDigits[i] = digit;
+            secretNumber[i] = digit;
+            secretWithPositions.put(digit, i);
         }
     }
 
     public GameCode(int[] secret) {
-        computerDigits = secret;
+        secretNumber = secret;
+        for (int i = 0; i < NO_DIGITS; i++) {
+            var digit = secretNumber[i];
+            secretWithPositions.put(digit, i);
+        }
     }
 
     // Sprawdzenie wprowadzonej liczby przez użytkownika
     boolean tryNumber(String number) {
 
-        int samePosition = 0;
-        int differentPosition = 0;
+        try {
+            // Sprawdzenie, czy liczba ma dokładnie 4 cyfry
+            if (playerDigits.length != NO_DIGITS || !number.matches("\\d{" + NO_DIGITS + "}")) {
+                throw new InputMismatchException();
+            }
 
-        // Sprawdzenie, czy liczba ma dokładnie 4 cyfry
-        if (playerDigits.length != NO_DIGITS || !number.matches("\\d{" + NO_DIGITS + "}")) {
+            Set<Integer> exactMatchesState = new HashSet<>();
+            Set<Integer> matchesState = new HashSet<>();
+
+            for (int i = 0; i < NO_DIGITS; i++) {
+                var digit = Character.getNumericValue(number.charAt(i));
+
+                if (secretWithPositions.containsKey(digit) && secretWithPositions.get(digit).equals(i)) {
+                    exactMatchesState.add(digit);
+                }
+            }
+
+            for (var i = 0; i < NO_DIGITS; i++) {
+                var digit = Character.getNumericValue(number.charAt(i));
+
+                if (exactMatchesState.contains(digit)) {
+                    continue;
+                }
+
+                if (secretWithPositions.containsKey(digit)) {
+                    matchesState.add(digit);
+                }
+            }
+
+            // Wyświetlenie wyników analizy
+            System.out.println("Liczba trafionych cyfr na właściwych miejscach: " + exactMatchesState.size());
+            System.out.println("Liczba trafionych cyfr, ale na niewłaściwych miejscach: " + matchesState.size());
+            System.out.println();
+
+            return exactMatchesState.size() == NO_DIGITS; // Zwraca prawdę, jeśli gracz odgadł całą liczbę
+
+        } catch (InputMismatchException e) {
             System.out.println("Wpisana liczba musi zawierać cztery cyfry!");
-            return false; // Zwraca fałsz, jeśli warunek nie jest spełniony
+            return false;
+        } catch (Exception e) {
+            System.out.printf("Error: %s.%n", e);
+            return false;
         }
 
-        for (int i = 0; i < NO_DIGITS; i++) {
-            playerDigits[i] = Character.getNumericValue(number.charAt(i));
-        }
-
-        var computerMap = new HashMap<Integer, Integer>();
-        var playerMap = new HashMap<Integer, Integer>();
-
-        for (int i = 0; i < NO_DIGITS; i++) {
-            computerMap.put(computerDigits[i], i);
-        }
-
-        // Sprawdzanie, czy liczby są w tym samym miejscu, jeśli nie to tworzymy mapę tych liczb oraz pozycji
-        for (int i = 0; i < NO_DIGITS; i++) {
-            if(computerDigits[i] == playerDigits[i]) {
-                samePosition++;
-            }
-            else {
-                playerMap.put(playerDigits[i], i);
-            }
-        }
-
-        // Sprawdzanie ile liczb jest nie na miejscu
-        for (var entry : playerMap.entrySet()) {
-            int digit = entry.getKey();
-            if(computerMap.containsKey(digit) && !Objects.equals(computerMap.get(digit), entry.getValue())) {
-                differentPosition++;
-            }
-        }
-
-        // Wyświetlenie wyników analizy
-        System.out.println("Liczba trafionych cyfr na właściwych miejscach: " + samePosition);
-        System.out.println("Liczba trafionych cyfr, ale na niewłaściwych miejscach: " + differentPosition);
-        System.out.println();
-
-        // Warunek zwycięstwa (wszystkie cyfry trafione na właściwych miejscach)
-        // Zwraca fałsz w przeciwnym przypadku
-        return samePosition == NO_DIGITS; // Zwraca prawdę, jeśli gracz odgadł całą liczbę
     }
 
     // Zwraca wylosowaną liczbę (pomocne do debugowania)
     public int[] returnNumber() {
-        return computerDigits;
+        return secretNumber;
     }
 }
