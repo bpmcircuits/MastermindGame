@@ -7,39 +7,39 @@ public class Main {
         createIntro();
 
         // TESTs
-//        testingNumbersArray(new int[]{2, 3, 4, 5}, "2345");
-//        testingNumbersArray(new int[]{2, 3, 4, 5}, "5432");
+//        testingNumbersArray(new int[]{1, 2, 3, 4}, "1234");
+//        testingNumbersArray(new int[]{1, 2, 3, 4}, "4321");
 //        testingNumbersArray(new int[]{2, 3, 4, 5}, "2222");
 //        testingNumbersArray(new int[]{2, 3, 4, 5}, "2232");
 //        testingNumbersArray(new int[]{2, 3, 4, 5}, "5545");
 
         // Tworzenie obiektu Scanner do wczytywania danych od użytkownika
-        try (Scanner userInputObj = new Scanner(System.in)) {
+        Scanner userInputObj = new Scanner(System.in);
 
-            // Inicjalizacja generatora losowych liczb
-            GameCode number = new GameCode();
+        // Inicjalizacja generatora losowych liczb
+        GameCode number = new GameCode();
 
-            // Debug: Wyświetlenie wylosowanej liczby (zakomentowane, aby nie zdradzać wyniku graczowi)
-            //System.out.println("Losowa liczba: " + Arrays.toString(number.returnNumber()));
+        // Debug: Wyświetlenie wylosowanej liczby (zakomentowane, aby nie zdradzać wyniku graczowi)
+        //System.out.println("Losowa liczba: " + Arrays.toString(number.returnNumber()));
 
-            // Pętla, która pozwala użytkownikowi zgadywać liczby do skutku
-            while (true) {
+        // Pętla, która pozwala użytkownikowi zgadywać liczby do skutku
+        while (true) {
 
-                System.out.println("Zgadnij losową liczbę czterocyfrową:");
+            System.out.println("Zgadnij losową liczbę czterocyfrową:");
 
-                // Wczytanie liczby od użytkownika
-                String userInput = userInputObj.nextLine();
+            // Wczytanie liczby od użytkownika
+            String userInput = userInputObj.nextLine();
 
-                // Analiza wprowadzonej liczby
-                boolean wygrana = number.tryNumber(userInput);
+            // Analiza wprowadzonej liczby
+            boolean wygrana = number.tryNumber(userInput);
 
-                // Sprawdzenie, czy gracz wygrał
-                if (wygrana) {
-                    System.out.println("Wygrałeś! Losowa liczba to: " + userInput);
-                    break; // Wyjście z pętli po wygranej
-                }
+            // Sprawdzenie, czy gracz wygrał
+            if (wygrana) {
+                System.out.println("Wygrałeś! Losowa liczba to: " + userInput);
+                break; // Wyjście z pętli po wygranej
             }
         }
+
     }
 
     static void createIntro() {
@@ -149,7 +149,6 @@ class GameCode {
             System.out.printf("Error: %s.%n", e);
             return false;
         }
-
     }
 
     // Zwraca wylosowaną liczbę (pomocne do debugowania)
